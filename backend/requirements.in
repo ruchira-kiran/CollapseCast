@@ -1,0 +1,14 @@
+# Direct runtime dependencies, pinned exactly (versions checked against PyPI on 2026-09-18).
+# requirements.txt is compiled from this file and pins the whole tree, including transitive
+# dependencies. To change a version, edit it here and re-run (from backend/):
+#
+#   uv pip compile requirements.in -o requirements.txt --python-version 3.12 --python-platform linux
+#
+fastapi==0.141.1
+uvicorn==0.53.0
+pydantic==2.13.5
+numpy==2.5.3
+scikit-learn==1.9.1
+# CPU-only build of XGBoost from the XGBoost project (same `import xgboost`). Plain `xgboost` pulls in
+# nvidia-nccl-cu13 (~290 MB of GPU libraries) on Linux, which we never use and which bloats the image.
+xgboost-cpu==3.4.1
