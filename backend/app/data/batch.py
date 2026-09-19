@@ -2,7 +2,8 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Mapping, Sequence
+from typing import Any
+from collections.abc import Mapping, Sequence
 
 import numpy as np
 
@@ -23,7 +24,7 @@ class SignalBatch:
         return len(self.postings)
 
     @classmethod
-    def from_records(cls, records: Sequence[Mapping[str, Any]]) -> "SignalBatch":
+    def from_records(cls, records: Sequence[Mapping[str, Any]]) -> SignalBatch:
         return cls(
             scalars={k: np.array([float(r[k]) for r in records], dtype=float) for k in SCALAR_SIGNALS},
             postings=[np.asarray(r[POSTINGS_SIGNAL], dtype=float) for r in records],

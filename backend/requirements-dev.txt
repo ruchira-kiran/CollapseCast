@@ -1,3 +1,4 @@
 -r requirements.txt
 pytest==9.1.1
-httpx==0.28.1
+# Starlette's TestClient now prefers httpx2 (same author) over httpx; plain httpx triggers a deprecation warning.
+httpx2==2.13.0

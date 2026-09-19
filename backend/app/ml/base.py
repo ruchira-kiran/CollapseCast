@@ -1,7 +1,7 @@
 """Shared model plumbing: out-of-fold scoring, the sigmoid, and a Random Forest wrapper."""
 from __future__ import annotations
 
-from typing import Callable
+from collections.abc import Callable
 
 import numpy as np
 from sklearn.ensemble import RandomForestClassifier

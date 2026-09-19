@@ -1,0 +1,7 @@
+# Lint config. Run from backend/:  ruff check .
+target-version = "py312"
+
+[lint]
+# E9/F: syntax errors and pyflakes (unused imports, undefined names); B: bugbear; UP: pyupgrade; SIM: simplifications.
+select = ["E9", "F", "B", "UP", "SIM"]
+ignore = ["E501"]  # line length is left to the author

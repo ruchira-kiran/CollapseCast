@@ -17,7 +17,7 @@ decline). With at most 8 players that is at most 256 coalitions, evaluated in on
 from __future__ import annotations
 
 from math import factorial
-from typing import Callable, Sequence
+from collections.abc import Callable, Sequence
 
 import numpy as np
 

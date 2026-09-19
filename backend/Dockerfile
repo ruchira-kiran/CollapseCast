@@ -10,10 +10,8 @@ RUN python -m venv /opt/venv && /opt/venv/bin/pip install -r requirements.txt
 
 # ---- runtime: slim base + the venv + app code only (no pip cache, no dev/test dependencies) --
 FROM python:3.12-slim AS runtime
-# XGBoost needs the OpenMP runtime, which the slim image does not ship.
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends libgomp1 \
-    && rm -rf /var/lib/apt/lists/*
+# No apt packages needed: the xgboost-cpu and scikit-learn wheels bundle their own OpenMP runtime
+# (libgomp), so the slim base image is enough.
 ENV PATH="/opt/venv/bin:$PATH" \
     PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1
@@ -21,7 +19,7 @@ RUN useradd --create-home --uid 10001 appuser
 WORKDIR /srv
 COPY --from=builder /opt/venv /opt/venv
 COPY app ./app
-USER appuser
+USER 10001
 
 EXPOSE 8000
 # App Runner health check: HTTP GET /health on port 8000 (configured in the service, not here).

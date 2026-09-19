@@ -59,7 +59,7 @@ class FailureModel:
         raw = self._model.get_booster().predict(self._dmatrix(X), pred_contribs=True)
         return raw[:, :-1], raw[:, -1]
 
-    def fresh(self) -> "FailureModel":
+    def fresh(self) -> FailureModel:
         return FailureModel(seed=self.seed)
 
     def oof_scores(self, X, y) -> np.ndarray:

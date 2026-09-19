@@ -2,9 +2,9 @@
 from __future__ import annotations
 
 import threading
-from typing import Any, Mapping, Sequence
+from typing import Any
+from collections.abc import Mapping, Sequence
 
-import numpy as np
 
 from app.config import (
     BAND_THRESHOLDS,
@@ -39,7 +39,7 @@ class CollapseCastEngine:
         self._lock = threading.Lock()
 
     @classmethod
-    def train(cls, risk_mode: str = RISK_MODE) -> "CollapseCastEngine":
+    def train(cls, risk_mode: str = RISK_MODE) -> CollapseCastEngine:
         engine = cls(risk_mode)
         dataset = load_dataset()
         engine.cascade.fit(dataset.batch, dataset.collapsed)
@@ -79,7 +79,7 @@ class CollapseCastEngine:
         ]
         if rank:
             ranks = rank_by_failure([r["scores"]["failure_raw"] for r in results])
-            for result, rank_ in zip(results, ranks):
+            for result, rank_ in zip(results, ranks, strict=True):
                 result["priority_rank"] = rank_
             results.sort(key=lambda r: r["priority_rank"])
         return results
@@ -102,7 +102,7 @@ class CollapseCastEngine:
         def rows(names, values, impacts):
             return [
                 {"signal": n, "label": SIGNAL_LABELS.get(n, n), "value": _r(v), "impact": _r(m)}
-                for n, v, m in zip(names, values, impacts)
+                for n, v, m in zip(names, values, impacts, strict=True)
             ]
 
         stage_rows = [
@@ -141,7 +141,7 @@ class CollapseCastEngine:
                 "detail": describe_signal(name, values.get(name), d),
                 "impact": _r(impact),
             }
-            for name, impact in zip(signal_names, impact_row)
+            for name, impact in zip(signal_names, impact_row, strict=True)
         ]
         impact_rows.sort(key=lambda r: -r["impact"])
         drivers = [r["detail"] for r in impact_rows if r["impact"] >= _MIN_DRIVER_IMPACT][:3]
