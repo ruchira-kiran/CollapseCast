@@ -1,0 +1,24 @@
+# AWS Amplify Hosting build spec (monorepo layout: the React app lives in /frontend).
+# In the Amplify console: connect this repo, tick "My app is a monorepo", set the app root to
+# `frontend`, and add the environment variable VITE_API_BASE_URL (the App Runner service URL).
+version: 1
+applications:
+  - appRoot: frontend
+    frontend:
+      phases:
+        preBuild:
+          commands:
+            # Vite 8 needs Node >= 20.19; pin the same Node used in development.
+            - nvm install 24.21.0
+            - nvm use 24.21.0
+            - npm ci
+        build:
+          commands:
+            - npm run build
+      artifacts:
+        baseDirectory: dist
+        files:
+          - '**/*'
+      cache:
+        paths:
+          - node_modules/**/*
